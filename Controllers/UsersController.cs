@@ -22,7 +22,28 @@ namespace DataEncryption.Controllers
         public async Task<IActionResult> Register(string userName, string email, string password)
         {
             User user = await this.repo.Register(userName, email, password);
-            return RedirectToAction("Index", "Home");   
+            return RedirectToAction("Login");
+        }
+
+        public IActionResult Login()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Login(string email, string password)
+        {
+            User user = await this.repo.LoginUserAsync(email, password);
+            if (user != null)
+            {
+                ViewData["MENSAJE"] = "Inicio de sesión correcto";
+            }
+            else
+            {
+                ViewData["MENSAJE"] = "Credenciales incorrectas";
+            }
+
+            return View();
         }
     }
 }
